@@ -14,31 +14,38 @@
 <?import java.net.URL?>
 
 <?import javafx.scene.control.PasswordField?>
-<VBox fx:controller="Lesson_6.Chat.client.Controller"
+<?import javafx.scene.control.ListView?>
+<VBox fx:controller="Client.Controller"
       xmlns:fx="http://javafx.com/fxml" alignment="center" spacing="5">
-    <stylesheets><URL value="@/Lesson_6/Chat/client/css/Styles.css"/></stylesheets>
+    <stylesheets><URL value="@/CSS/Styles.css"/></stylesheets>
 
     <HBox fx:id="upperPanel">
         <TextField HBox.hgrow="ALWAYS" promptText="Логин" fx:id="loginField"></TextField>
         <PasswordField promptText="Пароль" fx:id="passwordField" onAction="#tryToAuth"></PasswordField>
         <Button text="Авторизоваться" onAction="#tryToAuth"></Button>
-
     </HBox>
 
-    <TextArea fx:id="textArea" editable="false" VBox.vgrow="ALWAYS"/>
-    <HBox spacing="5" fx:id="bottomPanel" managed="false" visible="false">
-        <TextField fx:id="textField" HBox.hgrow="ALWAYS" promptText="Введите сообщение"
-                   onAction="#sendMsg"/>
-        <VBox.margin>
-            <Insets right="5"></Insets>
-        </VBox.margin>
+    <HBox VBox.vgrow="ALWAYS" >
+        <VBox HBox.hgrow="ALWAYS">
+            <HBox>
+                <TextArea fx:id="textArea" editable="false" VBox.vgrow="ALWAYS"/>
 
+                <ListView fx:id="clientlist" onMouseClicked="#selectClient"></ListView>
 
-        <Button fx:id="but" VBox.vgrow="ALWAYS" text="Отправить" onAction="#sendMsg">
+            </HBox>
 
-        </Button>
-
+            <HBox spacing="5" fx:id="bottomPanel" managed="false" visible="false">
+                <TextField fx:id="textField" HBox.hgrow="ALWAYS" promptText="Введите сообщение"
+                           onAction="#sendMsg"/>
+                <VBox.margin>
+                    <Insets right="5"></Insets>
+                </VBox.margin>
+                <Button fx:id="but" VBox.vgrow="ALWAYS" text="Отправить" onAction="#sendMsg"></Button>
+            </HBox>
+        </VBox>
     </HBox>
+
+
     <padding>
         <Insets bottom="5.0" right="5.0" left="5" top="5"/>
     </padding>
