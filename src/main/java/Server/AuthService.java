@@ -46,37 +46,50 @@ public class AuthService {
     }
 
     public static void addToBlackList(String userNick, String blacklistNick) {
-        String sql1 = String.format("select id from users where login = '%s'", userNick);
-        System.out.println(sql1);
-        String sql2 = String.format("select id from users where login = '%s'", blacklistNick);
-//        System.out.println(bl_user_id);
 
-        ResultSet rs = null;
-        int uid = 0;
         try {
-            rs = stmt.executeQuery(sql1);
-//            if(rs.next()){
-                uid = rs.getInt(1);
-                System.out.println(uid);
+            String  user_id = getIdByNickname(userNick);
+//            System.out.println(user_id);
+            String bl_user_id = getIdByNickname(blacklistNick);
+            System.out.println(bl_user_id);
 
-//            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-
-//        int uid = Integer.parseInt(user_id);
-//        int bluid = Integer.parseInt(bl_user_id);
-        try {
-            String query = "INSERT INTO blacklist (user_id /*,bl_user_id*/) VALUES (?/*, ?*/);";
+            String query = "INSERT INTO blacklist (user_id ,bl_user_id) VALUES (?, ?);";
             PreparedStatement ps = connection.prepareStatement(query);
-            ps.setInt(1, uid);
-//            ps.setInt(2, bluid);
+            ps.setInt(1, Integer.parseInt(user_id));
+            ps.setInt(2, Integer.parseInt(bl_user_id));
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    public static String getIdByNickname(String userNick) {
+        String sql = String.format("select id from users where nickname = '%s'", userNick);
+        ResultSet rs = null;
+        try {
+            rs = stmt.executeQuery(sql);
+            if(rs.next()){
+                return rs.getString(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return  null;
+    }
+//        String sql = String.format("select id from users where login = '%s'", userNick);
+//        ResultSet rs = null;
+//        try {
+//            rs = stmt.executeQuery(sql);
+//            System.out.println(rs);
+//            if(rs.next()){
+//                return rs.getString(1);
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return  null;
+//    }
+
 
     public static void disconnect(){
         try {

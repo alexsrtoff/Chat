@@ -10,6 +10,9 @@ public class ClientHandler {
     DataInputStream in;
     DataOutputStream out;
     MainServ serv;
+
+    public String getNick() {return nick;}
+
     String nick;
 
     public ClientHandler(MainServ serv, Socket socket){
@@ -53,12 +56,13 @@ public class ClientHandler {
                             serv.sendPrivateMsg(nick, msg);
                         }else if(msg.startsWith("/bl")){
                             String tockens[] =msg.split(" ");
-                            AuthService.addToBlackList(nick, tockens[1]);
-                            System.out.println(tockens[1] + " is in blacklist");
-
+                            if(AuthService.getIdByNickname(tockens[1]) != null){
+                                AuthService.addToBlackList(nick, tockens[1]);
+                                sendMsg("Пользователь: " + tockens[1] + " в черном списке.");
+                            }else sendMsg("Вы хотите добавить в черный список несуществующего пользователя");
                         }else serv.broadcastMsg(nick + ": " + msg);
 
-                        }
+                    }
 
 
 

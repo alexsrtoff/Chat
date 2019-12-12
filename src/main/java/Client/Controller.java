@@ -1,5 +1,7 @@
 package Client;
 
+import com.sun.beans.editors.ColorEditor;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -16,7 +18,7 @@ import java.net.Socket;
 
 public class Controller {
     @FXML
-    ListView clientlist;
+    ListView<String> clientList;
 
     @FXML
     TextArea textArea;
@@ -83,11 +85,26 @@ public class Controller {
 
 
                         while (true) {
-                            String srt = in.readUTF();
-                            if (srt.equals("/serverClosed")){
-                                break;
+                            String str = in.readUTF();
+                            if (str.startsWith("/")) {
+                                if (str.equals("/serverclosed")) break;
+                                if (str.startsWith("/clientslist ")) {
+                                    String[] tokens = str.split(" ");
+
+
+                                    Platform.runLater(() -> {
+                                        clientList.getItems().clear();
+//                                        clientList.setStyle("-fx-fill: red");
+                                        clientList.setStyle("-fx-font-size: 20");
+                                        clientList.setStyle("-fx-cell-fill: red");
+                                        for (int i = 1; i < tokens.length; i++) {
+                                            clientList.getItems().add(tokens[i]);
+                                        }
+                                    });
+                                }
+                            } else {
+                                textArea.appendText(str + "\n");
                             }
-                            textArea.appendText(srt + "\n");
                         }
                     } catch (IOException e) {
                         e.printStackTrace();

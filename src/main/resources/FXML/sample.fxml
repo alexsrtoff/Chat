@@ -20,7 +20,7 @@
     <stylesheets><URL value="@/CSS/Styles.css"/></stylesheets>
 
     <HBox fx:id="upperPanel">
-        <TextField HBox.hgrow="ALWAYS" promptText="Логин" fx:id="loginField"></TextField>
+        <TextField HBox.hgrow="ALWAYS"  promptText="Логин" fx:id="loginField"></TextField>
         <PasswordField promptText="Пароль" fx:id="passwordField" onAction="#tryToAuth"></PasswordField>
         <Button text="Авторизоваться" onAction="#tryToAuth"></Button>
     </HBox>
@@ -28,9 +28,9 @@
     <HBox VBox.vgrow="ALWAYS" >
         <VBox HBox.hgrow="ALWAYS">
             <HBox>
-                <TextArea fx:id="textArea" editable="false" VBox.vgrow="ALWAYS"/>
+                <TextArea fx:id="textArea" prefWidth="340" editable="false" VBox.vgrow="ALWAYS"/>
 
-                <ListView fx:id="clientlist" onMouseClicked="#selectClient"></ListView>
+                <ListView fx:id="clientList" onMouseClicked="#selectClient" prefWidth="100"></ListView>
 
             </HBox>
 

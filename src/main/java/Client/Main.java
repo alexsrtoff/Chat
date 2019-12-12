@@ -22,7 +22,7 @@ public class Main extends Application {
             Parent root = loader.load(getClass().getResourceAsStream(fxmlFile));
             primaryStage.setTitle("Chat");
             c = loader.getController();
-            primaryStage.setScene(new Scene(root, 350, 375));
+            primaryStage.setScene(new Scene(root, 440, 375));
             primaryStage.getIcons().add(new Image("icon.png"));
             primaryStage.show();
 

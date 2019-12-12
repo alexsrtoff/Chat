@@ -40,13 +40,27 @@ public class MainServ {
         }
     }
 
+    public void broadcastClientsList() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("/clientslist ");
+        for (ClientHandler o : clients) {
+            sb.append(o.getNick() + " ");
+        }
+        String out = sb.toString();
+        for (ClientHandler o : clients) {
+            o.sendMsg(out);
+        }
+    }
+
     public void subscribe(ClientHandler cllient){
         clients.add(cllient);
+        broadcastClientsList();
     }
 
     public void unsubscribe(ClientHandler client) {
         clients.remove(client);
-        System.out.println("Клиент отключился");
+        broadcastClientsList();
+        System.out.println("Клиент " + client.nick +  " отключился");
     }
 
     public void broadcastMsg(String msg) {
