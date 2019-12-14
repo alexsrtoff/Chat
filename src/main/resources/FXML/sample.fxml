@@ -25,9 +25,9 @@
         <Button text="Авторизоваться" onAction="#tryToAuth"></Button>
     </HBox>
 
-    <HBox VBox.vgrow="ALWAYS" >
-        <VBox HBox.hgrow="ALWAYS">
-            <HBox>
+    <HBox VBox.vgrow="ALWAYS" spacing="5" >
+        <VBox HBox.hgrow="ALWAYS" spacing="5">
+            <HBox spacing="5">
                 <TextArea fx:id="textArea" prefWidth="340" editable="false" VBox.vgrow="ALWAYS"/>
 
                 <ListView fx:id="clientList" onMouseClicked="#selectClient" prefWidth="100"></ListView>

@@ -9,8 +9,12 @@
 }
 .text-area .content{
     -fx-background-color: cornsilk;
-
 }
+/*.list-cell{*/
+/*    -fx-background-color: cornsilk;*/
+/*    -fx-cell-color: cornsilk;*/
+    /*-fx-text-fill: red;*/
+/*}*/
 #textArea{
     -fx-font-size: 14px;
     -fx-text-fill: darkblue;

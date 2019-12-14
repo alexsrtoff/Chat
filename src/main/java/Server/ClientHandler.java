@@ -59,6 +59,7 @@ public class ClientHandler {
                             if(AuthService.getIdByNickname(tockens[1]) != null){
                                 AuthService.addToBlackList(nick, tockens[1]);
                                 sendMsg("Пользователь: " + tockens[1] + " в черном списке.");
+                                serv.broadcastClientsList();
                             }else sendMsg("Вы хотите добавить в черный список несуществующего пользователя");
                         }else serv.broadcastMsg(nick + ": " + msg);
 

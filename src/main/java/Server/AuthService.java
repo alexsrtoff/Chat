@@ -1,6 +1,7 @@
 package Server;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class AuthService {
     private static Connection connection;
@@ -49,9 +50,7 @@ public class AuthService {
 
         try {
             String  user_id = getIdByNickname(userNick);
-//            System.out.println(user_id);
             String bl_user_id = getIdByNickname(blacklistNick);
-            System.out.println(bl_user_id);
 
             String query = "INSERT INTO blacklist (user_id ,bl_user_id) VALUES (?, ?);";
             PreparedStatement ps = connection.prepareStatement(query);
@@ -76,19 +75,6 @@ public class AuthService {
         }
         return  null;
     }
-//        String sql = String.format("select id from users where login = '%s'", userNick);
-//        ResultSet rs = null;
-//        try {
-//            rs = stmt.executeQuery(sql);
-//            System.out.println(rs);
-//            if(rs.next()){
-//                return rs.getString(1);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return  null;
-//    }
 
 
     public static void disconnect(){
@@ -98,4 +84,62 @@ public class AuthService {
             e.printStackTrace();
         }
     }
+
+//    public static boolean inBlackList(ClientHandler client, String bl_userNickname) {
+//        String nick1 = getIdByNickname(client.getNick());
+//        System.out.println(nick1);
+//        String nick2 = getIdByNickname(bl_userNickname);
+//        String sql = String.format("select nickname from blacklist\n" +
+//                "inner join users on bl_user_id = '%s' and user_id = '%s'", nick2, nick1);
+//        ResultSet rs = null;
+//        boolean res = false;
+//        try {
+//            rs = stmt.executeQuery(sql);
+//            if(rs.next()){
+//                if(rs.getString(1).equals(bl_userNickname)) res = true ;
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//
+//
+//        return res;
+//
+//
+//
+//    }
+
+    public static String isInBlacklist(ClientHandler client, String str) {
+        String tockens[] = str.split(" ");
+        StringBuilder sb = new StringBuilder();
+        sb.append("/clientslist ");
+        for(int i = 1; i < tockens.length; i++){
+            if(getBlackList(client.getNick(), tockens[i]) != null) {
+                System.out.println(getBlackList(client.getNick(), tockens[i]));
+                sb.append(getBlackList(client.getNick(), tockens[i]) + "_blocked ");
+            }else sb.append(tockens[i] + " ");
+        }
+        String out = sb.toString();
+        return  out;
+    }
+
+    public static String getBlackList(String userNick, String bl_nick) {
+        String nick1 = getIdByNickname(userNick);
+        String sql = String.format("select nickname from blacklist\n" +
+                "inner join users on bl_user_id = users.id and user_id ='%s'", nick1);
+        ResultSet rs = null;
+        try {
+            rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                if(rs.getString(1).equals(bl_nick)) return rs.getString(1);
+            }
+                return null;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return  null;
+    }
+
 }

@@ -19,7 +19,6 @@ public class MainServ {
 
             while (true) {
                 socket = server.accept();
-                System.out.println("Клиент подключился!");
                 new ClientHandler(this, socket);
             }
 
@@ -40,20 +39,24 @@ public class MainServ {
         }
     }
 
+
     public void broadcastClientsList() {
         StringBuilder sb = new StringBuilder();
         sb.append("/clientslist ");
         for (ClientHandler o : clients) {
-            sb.append(o.getNick() + " ");
+                sb.append(o.getNick() + " ");
         }
         String out = sb.toString();
         for (ClientHandler o : clients) {
-            o.sendMsg(out);
+            String clientList = AuthService.isInBlacklist(o, out);
+            o.sendMsg(clientList);
         }
     }
 
-    public void subscribe(ClientHandler cllient){
-        clients.add(cllient);
+
+    public void subscribe(ClientHandler client){
+        clients.add(client);
+        System.out.println("Клиент " + client.nick +  " подключился");
         broadcastClientsList();
     }
 
@@ -82,7 +85,7 @@ public class MainServ {
 //    }
 
     public void sendPrivateMsg(String nick, String msg) {
-        String[] tockens = msg.split(" ");
+        String[] tockens = msg.split(" ", 3);
         for (ClientHandler o: clients){
             if (tockens[1].equals(o.nick)) {
                 o.sendMsg(nick + " :" + tockens[2]);

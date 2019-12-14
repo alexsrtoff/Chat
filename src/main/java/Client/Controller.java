@@ -1,15 +1,15 @@
 package Client;
 
+import Server.AuthService;
 import com.sun.beans.editors.ColorEditor;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.util.Callback;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -90,13 +90,8 @@ public class Controller {
                                 if (str.equals("/serverclosed")) break;
                                 if (str.startsWith("/clientslist ")) {
                                     String[] tokens = str.split(" ");
-
-
                                     Platform.runLater(() -> {
                                         clientList.getItems().clear();
-//                                        clientList.setStyle("-fx-fill: red");
-                                        clientList.setStyle("-fx-font-size: 20");
-                                        clientList.setStyle("-fx-cell-fill: red");
                                         for (int i = 1; i < tokens.length; i++) {
                                             clientList.getItems().add(tokens[i]);
                                         }
