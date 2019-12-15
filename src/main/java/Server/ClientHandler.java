@@ -10,10 +10,10 @@ public class ClientHandler {
     DataInputStream in;
     DataOutputStream out;
     MainServ serv;
+    String nick;
 
     public String getNick() {return nick;}
 
-    String nick;
 
     public ClientHandler(MainServ serv, Socket socket){
     try {
@@ -29,6 +29,15 @@ public class ClientHandler {
 
                     while (true) {
                         String msg = in.readUTF();
+                        if(msg.startsWith("/reg")){
+                            String[] tockens = msg.split(" ");
+                            if(AuthService.checkClient(tockens[1])){
+                                sendMsg("Ник занят попробуйте друдой");
+                            }else {
+                                AuthService.regNewClient(tockens[1], tockens[2], tockens[3]);
+                                sendMsg("/regok");
+                            }
+                        }
                         if (msg.startsWith("/auth")) {
                             String[] tockens = msg.split(" ");
                             String newNick = AuthService.getNickByLoginAndPass(tockens[1], tockens[2]);
@@ -61,7 +70,7 @@ public class ClientHandler {
                                 sendMsg("Пользователь: " + tockens[1] + " в черном списке.");
                                 serv.broadcastClientsList();
                             }else sendMsg("Вы хотите добавить в черный список несуществующего пользователя");
-                        }else serv.broadcastMsg(nick + ": " + msg);
+                        }else serv.broadcastMsg(nick + " " +nick + ": " + msg);
 
                     }
 

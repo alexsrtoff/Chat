@@ -1,7 +1,6 @@
 package Server;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 public class AuthService {
     private static Connection connection;
@@ -21,7 +20,7 @@ public class AuthService {
         }
     }
     public static String getNickByLoginAndPass(String login, String pass) {
-        String sql = String.format("select nickname from users where login = '%s' and password = '%s'", login, pass);
+        String sql = String.format("select nickname from users where login = '%s' and password = '%s'", login, pass.hashCode());
         ResultSet rs = null;
         try {
             rs = stmt.executeQuery(sql);
@@ -33,19 +32,6 @@ public class AuthService {
         }
         return  null;
     }
-    public static void addUser(String login, String pass, String nick) {
-        try {
-            String query = "INSERT INTO main (login, password, nickname) VALUES (?, ?, ?);";
-            PreparedStatement ps = connection.prepareStatement(query);
-            ps.setString(1, login);
-            ps.setInt(2, pass.hashCode());
-            ps.setString(3, nick);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void addToBlackList(String userNick, String blacklistNick) {
 
         try {
@@ -85,30 +71,20 @@ public class AuthService {
         }
     }
 
-//    public static boolean inBlackList(ClientHandler client, String bl_userNickname) {
-//        String nick1 = getIdByNickname(client.getNick());
-//        System.out.println(nick1);
-//        String nick2 = getIdByNickname(bl_userNickname);
-//        String sql = String.format("select nickname from blacklist\n" +
-//                "inner join users on bl_user_id = '%s' and user_id = '%s'", nick2, nick1);
-//        ResultSet rs = null;
-//        boolean res = false;
-//        try {
-//            rs = stmt.executeQuery(sql);
-//            if(rs.next()){
-//                if(rs.getString(1).equals(bl_userNickname)) res = true ;
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//
-//        return res;
-//
-//
-//
-//    }
+
+    public static boolean checkClient(String nickname){
+        String sql = String.format("select nickname from users");
+        ResultSet rs = null;
+        try {
+            rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                if(rs.getString(1).equals(nickname)) return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return  false;
+    }
 
     public static String isInBlacklist(ClientHandler client, String str) {
         String tockens[] = str.split(" ");
@@ -142,4 +118,17 @@ public class AuthService {
         return  null;
     }
 
+    public static void regNewClient(String nickname, String login, String password) {
+        try {
+            String query = "INSERT INTO users (nickname ,login, password) VALUES (?, ?, ?);";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, nickname);
+            ps.setString(2, login);
+            ps.setInt(3, password.hashCode());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

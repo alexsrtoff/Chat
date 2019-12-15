@@ -22,19 +22,27 @@
     <HBox fx:id="upperPanel">
         <TextField HBox.hgrow="ALWAYS"  promptText="Логин" fx:id="loginField"></TextField>
         <PasswordField promptText="Пароль" fx:id="passwordField" onAction="#tryToAuth"></PasswordField>
-        <Button text="Авторизоваться" onAction="#tryToAuth"></Button>
+        <Button text="Авторизация" onAction="#tryToAuth"></Button>
+        <Button text="Регистрация" onAction="#regpanel" alignment="BASELINE_RIGHT"></Button>
     </HBox>
+    <HBox fx:id="regPanel" managed="false" visible="false">
+        <TextField HBox.hgrow="ALWAYS"  promptText="Ник" fx:id="setNicknameField"></TextField>
+        <TextField HBox.hgrow="ALWAYS"  promptText="Логин" fx:id="setLoginField"></TextField>
+        <PasswordField promptText="Пароль" fx:id="setPasswordField" onAction="#reg"></PasswordField>
+        <Button text="Зарегистрироваться" onAction="#reg" alignment="BASELINE_RIGHT"></Button>
+    </HBox>
+
 
     <HBox VBox.vgrow="ALWAYS" spacing="5" >
         <VBox HBox.hgrow="ALWAYS" spacing="5">
             <HBox spacing="5">
-                <TextArea fx:id="textArea" prefWidth="340" editable="false" VBox.vgrow="ALWAYS"/>
+                <TextArea fx:id="textArea"  editable="false" VBox.vgrow="ALWAYS"/>
 
-                <ListView fx:id="clientList" onMouseClicked="#selectClient" prefWidth="100"></ListView>
+                <ListView fx:id="clientList" onMouseClicked="#selectClient" ></ListView>
 
             </HBox>
 
-            <HBox spacing="5" fx:id="bottomPanel" managed="false" visible="false">
+            <HBox spacing="5" fx:id="bottomPanel" managed="false" visible="false" HBox.hgrow="ALWAYS">
                 <TextField fx:id="textField" HBox.hgrow="ALWAYS" promptText="Введите сообщение"
                            onAction="#sendMsg"/>
                 <VBox.margin>

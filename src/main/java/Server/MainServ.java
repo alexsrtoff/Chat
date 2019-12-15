@@ -67,8 +67,11 @@ public class MainServ {
     }
 
     public void broadcastMsg(String msg) {
+        String[] tockens = msg.split(" ", 2);
         for (ClientHandler o: clients) {
-            o.sendMsg(msg);
+           if(AuthService.getBlackList(o.getNick(), tockens[0]) == null){
+               o.sendMsg(tockens[1]);
+           }
         }
     }
 
@@ -79,10 +82,6 @@ public class MainServ {
         }
         return check;
     }
-
-//    public boolean checkPrivateMsg(String msg) {
-//        return msg.startsWith("/w");
-//    }
 
     public void sendPrivateMsg(String nick, String msg) {
         String[] tockens = msg.split(" ", 3);
