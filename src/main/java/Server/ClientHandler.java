@@ -31,16 +31,19 @@ public class ClientHandler {
                         String msg = in.readUTF();
                         if(msg.startsWith("/reg")){
                             String[] tockens = msg.split(" ");
-                            if(AuthService.checkClient(tockens[1])){
+                            if(DBService.checkClient(tockens[1])){
                                 sendMsg("Ник занят попробуйте друдой");
+                                DBService.logger(tockens[1], "register faild");
+
                             }else {
-                                AuthService.regNewClient(tockens[1], tockens[2], tockens[3]);
+                                DBService.regNewClient(tockens[1], tockens[2], tockens[3]);
                                 sendMsg("/regok");
+                                DBService.logger(tockens[1], "register");
                             }
                         }
                         if (msg.startsWith("/auth")) {
                             String[] tockens = msg.split(" ");
-                            String newNick = AuthService.getNickByLoginAndPass(tockens[1], tockens[2]);
+                            String newNick = DBService.getNickByLoginAndPass(tockens[1], tockens[2]);
                             if(serv.checkNick(newNick)){
                                 sendMsg("Логин/ник занят. Введите другой логин");
                             }
@@ -48,6 +51,7 @@ public class ClientHandler {
                                 sendMsg("/authok");
                                 nick = newNick;
                                 serv.subscribe(ClientHandler.this);
+                                DBService.logger(nick, "logged in");
                                 break;
                             }else{
                                 sendMsg("Неверный логин/пароль");
@@ -59,15 +63,19 @@ public class ClientHandler {
                         String msg = in.readUTF();
                         if (msg.equals("/end")) {
                             out.writeUTF("/serverClosed");
+                            DBService.logger(nick, "logged out");
+
                             break;
                         }
                         if(msg.startsWith("/w")) {
                             serv.sendPrivateMsg(nick, msg);
                         }else if(msg.startsWith("/bl")){
                             String tockens[] =msg.split(" ");
-                            if(AuthService.getIdByNickname(tockens[1]) != null){
-                                AuthService.addToBlackList(nick, tockens[1]);
+                            if(DBService.getIdByNickname(tockens[1]) != null){
+                                DBService.addToBlackList(nick, tockens[1]);
                                 sendMsg("Пользователь: " + tockens[1] + " в черном списке.");
+                                String log = "add " + tockens[1] + " to blacklist";
+                                DBService.logger(nick, log);
                                 serv.broadcastClientsList();
                             }else sendMsg("Вы хотите добавить в черный список несуществующего пользователя");
                         }else serv.broadcastMsg(nick + " " +nick + ": " + msg);

@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.TextField?>
 
-<?scenebuilder-stylesheet /css/Styles.css?>
+<?scenebuilder-stylesheet /CSS/Styles.css?>
 
 <?import java.net.URL?>
 

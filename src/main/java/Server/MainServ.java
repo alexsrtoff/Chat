@@ -13,7 +13,7 @@ public class MainServ {
         ServerSocket server = null;
         Socket socket = null;
         try {
-            AuthService.connect();
+            DBService.connect();
             server = new ServerSocket(8189);
             System.out.println("Сервер запущен!");
 
@@ -35,7 +35,7 @@ public class MainServ {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            AuthService.disconnect();
+            DBService.disconnect();
         }
     }
 
@@ -48,7 +48,7 @@ public class MainServ {
         }
         String out = sb.toString();
         for (ClientHandler o : clients) {
-            String clientList = AuthService.isInBlacklist(o, out);
+            String clientList = DBService.isInBlacklist(o, out);
             o.sendMsg(clientList);
         }
     }
@@ -69,7 +69,7 @@ public class MainServ {
     public void broadcastMsg(String msg) {
         String[] tockens = msg.split(" ", 2);
         for (ClientHandler o: clients) {
-           if(AuthService.getBlackList(o.getNick(), tockens[0]) == null){
+           if(DBService.getBlackList(o.getNick(), tockens[0]) == null){
                o.sendMsg(tockens[1]);
            }
         }

@@ -1,10 +1,13 @@
 package Server;
 
 import java.sql.*;
+import java.util.Date;
 
-public class AuthService {
+public class DBService {
     private static Connection connection;
     private static Statement stmt;
+    private static Date date = new Date();
+
 
     public static void connect(){
         try {
@@ -131,4 +134,19 @@ public class AuthService {
         }
 
     }
+
+    public static void logger(String nick, String action) {
+        try {
+            String query = "INSERT INTO logger (user_nickname ,action , action_date) VALUES (?, ?, ?);";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, nick);
+            ps.setString(2, action);
+            ps.setString(3, date.toString());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
